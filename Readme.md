@@ -124,9 +124,10 @@ Make sure you have the following installed:
 We welcome contributions! Please follow the steps below to contribute:
 
   - Fork the repository.
-  - Create a feature branch (git checkout -b feature-name).
-  - Commit your changes (git commit -m "Add new feature").
-  - Push to your branch (git push origin feature-name).
+  - Clone the repository.
+  - Create a feature branch `git checkout -b feature-name`.
+  - Commit your changes `git commit -m "Add new feature"`.
+  - Push to your branch `git push origin feature-name`.
   - Open a Pull Request on GitHub.
 
 
