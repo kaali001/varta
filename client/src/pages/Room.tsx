@@ -4,7 +4,9 @@ import { Socket, io } from "socket.io-client";
 import { ClipLoader } from "react-spinners";
 import config from "../config";
 
+
 const URL = `${config.backendUrl}`;
+
 
 declare global {
   interface Window {
