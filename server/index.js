@@ -18,16 +18,24 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: frontend_url,
-    methods: ["GET", "POST","HEAD","PUT","PATCH","DELETE"]
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+
   },
 });
 
 const corsOptions = {
   origin: frontend_url, 
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, 
 };
 // Use CORS middleware
 app.use(cors(corsOptions));
+// Handle OPTIONS preflight requests
+app.options('*', cors(corsOptions)); 
+
 
 const userManager = new UserManager();
 
