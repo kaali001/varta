@@ -31,7 +31,10 @@ export const Room = ({
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    const socket = io(URL);
+     const socket = io(URL, {
+      transports: ['websocket'], // Use only WebSocket
+      withCredentials: true,      // Allow credentials (cookies/auth headers)
+    });
     socketRef.current = socket;
 
     const initializePeerConnection = () => {
