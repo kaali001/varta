@@ -21,6 +21,7 @@ const io = new Server(server, {
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
+
   },
 });
 
@@ -34,6 +35,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 // Handle OPTIONS preflight requests
 app.options('*', cors(corsOptions)); 
+
 
 const userManager = new UserManager();
 
