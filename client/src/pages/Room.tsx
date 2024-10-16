@@ -2,8 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Socket, io } from "socket.io-client";
 import { ClipLoader } from "react-spinners";
+import config from "../config";
 
-const URL = "http://localhost:5000";
+const URL = `${config.backendUrl}`;
 
 declare global {
   interface Window {
