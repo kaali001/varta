@@ -55,6 +55,12 @@ Make sure you have the following installed:
    cd server
    npm install
   ```
+    - (option)create a config.env file and add below details, as of now both predefined in `index.js`.
+    ```
+    PORT
+    FRONTEND_URL
+
+    ```
   - #### For the frontend
   ```
    cd ../client
