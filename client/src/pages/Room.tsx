@@ -1,11 +1,9 @@
-
 import { useEffect, useRef, useState } from "react";
 import { Socket, io } from "socket.io-client";
 import { ClipLoader } from "react-spinners";
 import config from "../config";
 
 const URL = `${config.backendUrl}`;
-
 
 declare global {
   interface Window {
@@ -31,7 +29,7 @@ export const Room = ({
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-     const socket = io(URL, {
+    const socket = io(URL, {
       transports: ['websocket'], // Use only WebSocket
       withCredentials: true,      // Allow credentials (cookies/auth headers)
     });
@@ -152,19 +150,22 @@ export const Room = ({
   }, [localVideoTrack]);
 
   return (
-    <div className="relative w-full h-full flex justify-center items-center">
+    <div className="relative w-full h-full flex justify-center items-center bg-gradient-to-r from-purple-900 to-indigo-900">
       <div className="relative w-full h-full">
+        {/* Remote Video with Futuristic Glow */}
         <video
           ref={remoteVideoRef}
           autoPlay
-          className="w-full h-full object-cover rounded-lg shadow-lg"
+          className="w-full h-full object-cover rounded-lg shadow-lg border-4 border-purple-500 neon-glow"
         />
         {lobby && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
             <ClipLoader color="#4A90E2" size={50} />
           </div>
         )}
-        <div className="absolute bottom-4 left-4 border border-gray-300 rounded-lg overflow-hidden shadow-lg">
+
+        {/* Local Video in the corner with Pulsing Animation */}
+        <div className="absolute bottom-4 left-4 border-2 border-indigo-500 rounded-lg overflow-hidden shadow-lg pulse-effect">
           <video
             ref={localVideoRef}
             muted
@@ -172,7 +173,32 @@ export const Room = ({
           />
         </div>
       </div>
-      <p className="absolute bottom-2 text-lg font-semibold text-white">{name}</p>
+
+      {/* Participant Name with Futuristic Effect */}
+      <p className="absolute bottom-2 text-lg font-semibold text-white neon-text">
+        {name}
+      </p>
+
+      {/* Adding Neon Glow Animation */}
+      <style>{`
+        .neon-glow {
+          box-shadow: 0 0 20px rgba(138, 43, 226, 0.7), 0 0 30px rgba(75, 0, 130, 0.5);
+        }
+        .pulse-effect {
+          animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+          0%, 100% {
+            box-shadow: 0 0 15px rgba(75, 0, 130, 0.5);
+          }
+          50% {
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.7);
+          }
+        }
+        .neon-text {
+          text-shadow: 0 0 10px rgba(138, 43, 226, 0.8), 0 0 20px rgba(75, 0, 130, 0.8);
+        }
+      `}</style>
     </div>
   );
 };

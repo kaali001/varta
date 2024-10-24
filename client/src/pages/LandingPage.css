@@ -1,0 +1,292 @@
+/* General Styles */
+.min-h-screen {
+    min-height: 100vh;
+  }
+  
+  .bg-gradient-to-r {
+    background: linear-gradient(to right, #6a5acd, #4b0082);
+  }
+  
+  .flex {
+    display: flex;
+  }
+  
+  .justify-center {
+    justify-content: center;
+  }
+  
+  .items-center {
+    align-items: center;
+  }
+  
+  .relative {
+    position: relative;
+  }
+  
+  .overflow-hidden {
+    overflow: hidden;
+  }
+  
+  .absolute {
+    position: absolute;
+  }
+  
+  .inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  
+  .bg-cover {
+    background-size: cover;
+  }
+  
+  .bg-center {
+    background-position: center;
+  }
+  
+  .opacity-50 {
+    opacity: 0.5;
+  }
+  
+  .filter {
+    filter: blur(4px);
+  }
+  
+  .blur-md {
+    filter: blur(10px);
+  }
+  
+  .z-50 {
+    z-index: 50;
+  }
+  
+  /* Heading and Paragraph Styling */
+  .text-white {
+    color: white;
+  }
+  
+  .font-bold {
+    font-weight: bold;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  .mb-8 {
+    margin-bottom: 2rem;
+  }
+  
+  .text-shadow {
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Button Styles */
+  .bg-white {
+    background-color: white;
+  }
+  
+  .text-indigo-600 {
+    color: #4b0082;
+  }
+  
+  .font-semibold {
+    font-weight: 600;
+  }
+  
+  .py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  
+  .px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .rounded-lg {
+    border-radius: 0.5rem;
+  }
+  
+  .transition {
+    transition: all 0.3s ease;
+  }
+  
+  .duration-300 {
+    transition-duration: 300ms;
+  }
+  
+  .transform {
+    transform: scale(1);
+  }
+  
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+  
+  .shadow-lg {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .hover\:shadow-xl:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+  }
+  
+  .bg-indigo-100:hover {
+    background-color: #c3bfe5;
+  }
+  
+  /* Animation for Avatars and Connection Simulation */
+  .animate-pulse {
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.75;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.75;
+    }
+  }
+  
+  .bg-gradient-to-r {
+    background: linear-gradient(to right, #ffffff, #9370db);
+  }
+  
+  .blur-2xl {
+    filter: blur(20px);
+  }
+  
+  .opacity-75 {
+    opacity: 0.75;
+  }
+  
+  .shadow-xl {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Avatar Bubbles */
+  .w-14 {
+    width: 3.5rem;
+  }
+  
+  .h-14 {
+    height: 3.5rem;
+  }
+  
+  .w-20 {
+    width: 5rem;
+  }
+  
+  .h-20 {
+    height: 5rem;
+  }
+  
+  .bg-indigo-500 {
+    background-color: #4b0082;
+  }
+  
+  .bg-purple-500 {
+    background-color: #6a5acd;
+  }
+  
+  .rounded-full {
+    border-radius: 9999px;
+  }
+  
+  /* Small Green Status Dots */
+  .block {
+    display: block;
+  }
+  
+  .w-3 {
+    width: 0.75rem;
+  }
+  
+  .h-3 {
+    height: 0.75rem;
+  }
+  
+  .bg-green-400 {
+    background-color: #48bb78;
+  }
+  
+  .absolute {
+    position: absolute;
+  }
+  
+  .bottom-0 {
+    bottom: 0;
+  }
+  
+  .right-0 {
+    right: 0;
+  }
+  
+  /* Ping Effect */
+  .animate-ping {
+    animation: ping 1.5s infinite cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  @keyframes ping {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    75% {
+      transform: scale(2);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+  }
+  
+  /* Connecting Text */
+  .text-lg {
+    font-size: 1.125rem;
+  }
+  
+  .bottom-5 {
+    bottom: 1.25rem;
+  }
+  
+  /* Animation transitions */
+  .transition-all {
+    transition: all 1s ease;
+  }
+  
+  .duration-1000 {
+    transition-duration: 1000ms;
+  }
+  
+  .ease-out {
+    transition-timing-function: ease-out;
+  }
+  
+  .opacity-0 {
+    opacity: 0;
+  }
+  
+  .opacity-100 {
+    opacity: 1;
+  }
+  
+  .translate-y-0 {
+    transform: translateY(0);
+  }
+  
+  .translate-y-10 {
+    transform: translateY(10rem);
+  }
+  

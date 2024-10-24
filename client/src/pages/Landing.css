@@ -1,0 +1,108 @@
+/* Main container for the landing page */
+.landing-container {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    animation: gradientAnimation 5s ease infinite; /* Animated gradient background */
+}
+
+/* Blurred background video */
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(4px); /* Increased blur for a more immersive background */
+    z-index: 1;
+}
+
+/* Overlay for content */
+.overlay {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+/* Title styling with glow effect */
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.7), /* Neon cyan glow */
+                 0 0 30px rgba(0, 255, 255, 0.5);
+    animation: titleAnimation 1.5s ease-in-out infinite alternate; /* Pulsing effect */
+}
+
+/* Input styling */
+.name-input {
+    padding: 10px;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    transition: border 0.3s, box-shadow 0.3s; /* Added transition for box shadow */
+}
+
+/* Focus state for input */
+.name-input:focus {
+    outline: none;
+    border: 2px solid #00f;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.7); /* Neon glow effect on focus */
+}
+
+/* Button styling */
+.join-button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Added transition for box shadow */
+}
+
+/* Hover state for button */
+.join-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), /* Neon glow on hover */
+                0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+/* Styles for futuristic text shadow */
+.text-shadow {
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.7), /* Neon cyan glow */
+               0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+/* Keyframes for gradient animation */
+@keyframes gradientAnimation {
+    0% {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+    }
+    50% {
+        background: linear-gradient(135deg, #2a5298, #1e3c72);
+    }
+    100% {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+    }
+}
+
+/* Keyframes for title animation */
+@keyframes titleAnimation {
+    0% {
+        text-shadow: 0 0 20px rgba(0, 255, 255, 0.7),
+                     0 0 30px rgba(0, 255, 255, 0.5);
+    }
+    100% {
+        text-shadow: 0 0 40px rgba(0, 255, 255, 1),
+                     0 0 60px rgba(0, 255, 255, 0.7);
+    }
+}
