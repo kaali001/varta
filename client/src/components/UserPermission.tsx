@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, PropsWithChildren } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { Camera, Mic, X, Info } from "lucide-react";
 
@@ -38,6 +38,7 @@ export default function UserPermission({
 
   const popoverRef = useRef<HTMLDivElement>(null);
 
+  // Ask for permission and update the audio,video track state and updates appropriate states.
   const handlePermissionRequest = async (mediaType: "video" | "audio") => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -86,6 +87,7 @@ export default function UserPermission({
         }
         setVideoPermission(false);
       } else {
+        // If we have access set the video object.
         handlePermissionRequest("video");
         setVideoPermission(true);
       }
@@ -96,6 +98,7 @@ export default function UserPermission({
         }
         setAudioPermission(false);
       } else {
+        // If we have access set the video object.
         handlePermissionRequest("audio");
         setAudioPermission(true);
       }
