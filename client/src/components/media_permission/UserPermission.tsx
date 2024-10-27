@@ -23,6 +23,7 @@ interface UserPermissionProps {
   >;
 }
 
+/* It'll be better if you adjust the color pallette yourself if your not satisfied with mine. I also add the color on tailwind.config feel free to modify it. */
 export default function UserPermission({
   isPopoverOpen,
   setIsPopoverOpen,
