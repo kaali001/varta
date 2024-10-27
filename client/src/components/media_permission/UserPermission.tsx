@@ -31,8 +31,11 @@ export default function UserPermission({
   setError,
 }: UserPermissionProps) {
   const [videoPermission, setVideoPermission] = useState<boolean | null>(null);
+
   const [audioPermission, setAudioPermission] = useState<boolean | null>(null);
+
   const didUserInteracted = sessionStorage.getItem("didUserInteracted");
+
   const popoverRef = useRef<HTMLDivElement>(null);
 
   const handlePermissionRequest = async (mediaType: "video" | "audio") => {
