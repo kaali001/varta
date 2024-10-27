@@ -31,14 +31,10 @@ export default function UserPermission({
   setError,
 }: UserPermissionProps) {
   const [videoPermission, setVideoPermission] = useState<boolean | null>(null);
-
   const [audioPermission, setAudioPermission] = useState<boolean | null>(null);
-
   const didUserInteracted = sessionStorage.getItem("didUserInteracted");
-
   const popoverRef = useRef<HTMLDivElement>(null);
 
-  // Ask for permission and update the audio,video track state and updates appropriate states.
   const handlePermissionRequest = async (mediaType: "video" | "audio") => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -80,14 +76,12 @@ export default function UserPermission({
         navigator.permissions.query({ name: "microphone" as PermissionName }),
       ]);
 
-      // If user had manually disable the access or denied access we can detect it. Why? If denied to tell the user to manually grant acces as the buttons will not work and the browser permission popup will not appear. ,
       if (camera.state === "denied" || camera.state === "prompt") {
         if (camera.state === "denied") {
           sessionStorage.setItem("didUserInteracted", "true");
         }
         setVideoPermission(false);
       } else {
-        // If we have access set the video object.
         handlePermissionRequest("video");
         setVideoPermission(true);
       }
@@ -98,7 +92,6 @@ export default function UserPermission({
         }
         setAudioPermission(false);
       } else {
-        // If we have access set the video object.
         handlePermissionRequest("audio");
         setAudioPermission(true);
       }
@@ -140,20 +133,23 @@ export default function UserPermission({
           <div className="relative p-6">
             <button
               onClick={() => setIsPopoverOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out"
+              className="absolute top-4 right-4 text-highlightOrange hover:text-accentOrange transition duration-150 ease-in-out"
               aria-label="Close"
             >
               <X size={24} />
             </button>
 
-            <h3 className="text-2xl font-bold leading-6 text-gray-900 mb-4">
+            <h3 className="text-2xl font-bold leading-6 text-primaryPink mb-4">
               Media Access Permissions
             </h3>
 
-            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+            <div className="bg-highlightOrange border-l-4 border-accentOrange p-4 mb-6">
               <div className="grid grid-flow-col items-center">
-                <Info className="h-6 w-6 text-blue-400" aria-hidden="true" />
-                <p className="text-sm text-blue-700 ml-3">
+                <Info
+                  className="h-6 w-6 text-accentOrange"
+                  aria-hidden="true"
+                />
+                <p className="text-sm text-white ml-3">
                   We need your permission to access your camera and microphone
                   for the best experience. Your privacy is important to us.
                 </p>
@@ -162,7 +158,7 @@ export default function UserPermission({
 
             <div className="space-y-6">
               <MediaToggle
-                icon={<Camera className="h-8 w-8 text-indigo-500 mr-4" />}
+                icon={<Camera className="h-8 w-8 text-dangerRed mr-4" />}
                 title="Camera Access"
                 description="Allow us to use your camera for video calls"
                 isPermissionGranted={videoPermission}
@@ -177,7 +173,7 @@ export default function UserPermission({
               )}
 
               <MediaToggle
-                icon={<Mic className="h-8 w-8 text-indigo-500 mr-4" />}
+                icon={<Mic className="h-8 w-8 text-dangerRed mr-4" />}
                 title="Microphone Access"
                 description="Allow us to use your microphone for audio calls"
                 isPermissionGranted={audioPermission}
@@ -195,7 +191,7 @@ export default function UserPermission({
             <div className="mt-8">
               <button
                 onClick={handleOnConfirm}
-                className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+                className="w-full bg-primaryPink hover:bg-gradient-to-r hover:from-dangerRed hover:to-accentOrange text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primaryPink transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
               >
                 Confirm Settings
               </button>
