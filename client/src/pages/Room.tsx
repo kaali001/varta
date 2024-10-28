@@ -1,9 +1,11 @@
+
 import { useEffect, useRef, useState } from "react";
 import { Socket, io } from "socket.io-client";
 import { ClipLoader } from "react-spinners";
 import config from "../config";
 
 const URL = `${config.backendUrl}`;
+
 
 declare global {
   interface Window {
@@ -29,9 +31,9 @@ export const Room = ({
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    const socket = io(URL, {
-      transports: ["websocket"], // Use only WebSocket
-      withCredentials: true, // Allow credentials (cookies/auth headers)
+     const socket = io(URL, {
+      transports: ['websocket'], // Use only WebSocket
+      withCredentials: true,      // Allow credentials (cookies/auth headers)
     });
     socketRef.current = socket;
 
@@ -47,9 +49,7 @@ export const Room = ({
 
       pc.ontrack = (e) => {
         console.log("Adding remote track:", e.track);
-        const stream =
-          (remoteVideoRef.current?.srcObject as MediaStream) ||
-          new MediaStream();
+        const stream = remoteVideoRef.current?.srcObject as MediaStream || new MediaStream();
         stream.addTrack(e.track);
         remoteVideoRef.current!.srcObject = stream;
       };
@@ -85,9 +85,7 @@ export const Room = ({
 
       try {
         if (pc.signalingState !== "stable") {
-          console.warn(
-            `Unexpected signaling state: ${pc.signalingState}. Resetting...`
-          );
+          console.warn(`Unexpected signaling state: ${pc.signalingState}. Resetting...`);
           await pc.setRemoteDescription(new RTCSessionDescription(sdp));
         }
 
@@ -98,9 +96,7 @@ export const Room = ({
           console.log("Sending answer SDP...");
           socket.emit("answer", { sdp: answer, roomId });
         } else {
-          console.warn(
-            `Cannot create answer. Signaling state: ${pc.signalingState}`
-          );
+          console.warn(`Cannot create answer. Signaling state: ${pc.signalingState}`);
         }
       } catch (error) {
         console.error("Error handling offer:", error);
@@ -120,9 +116,7 @@ export const Room = ({
           console.log("Setting remote answer SDP...");
           await pc.setRemoteDescription(new RTCSessionDescription(sdp));
         } else {
-          console.warn(
-            `Unexpected state when receiving answer: ${pc.signalingState}`
-          );
+          console.warn(`Unexpected state when receiving answer: ${pc.signalingState}`);
         }
       } catch (error) {
         console.error("Error setting remote answer SDP:", error);
@@ -132,9 +126,7 @@ export const Room = ({
     socket.on("add-ice-candidate", async ({ candidate }) => {
       console.log("Adding ICE candidate...");
       try {
-        await peerConnectionRef.current?.addIceCandidate(
-          new RTCIceCandidate(candidate)
-        );
+        await peerConnectionRef.current?.addIceCandidate(new RTCIceCandidate(candidate));
       } catch (error) {
         console.error("Error adding ICE candidate:", error);
       }
@@ -173,12 +165,14 @@ export const Room = ({
           </div>
         )}
         <div className="absolute bottom-4 left-4 border border-gray-300 rounded-lg overflow-hidden shadow-lg">
-          <video ref={localVideoRef} muted className="w-24 h-24 object-cover" />
+          <video
+            ref={localVideoRef}
+            muted
+            className="w-24 h-24 object-cover"
+          />
         </div>
       </div>
-      <p className="absolute bottom-2 text-lg font-semibold text-white">
-        {name}
-      </p>
+      <p className="absolute bottom-2 text-lg font-semibold text-white">{name}</p>
     </div>
   );
 };
