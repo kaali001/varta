@@ -58,4 +58,7 @@ export class UserManager {
       this.roomManager.onIceCandidates(roomId, socket.id, candidate, type);
     });
   }
+  getUserCount() {
+    return this.users.length;
+  }
 }
