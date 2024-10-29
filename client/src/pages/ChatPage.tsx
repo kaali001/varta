@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { Room } from "./Room";
-
+import { Navbar } from "../components/Navbar";
 import UserPermission from "../components/media_permission/UserPermission";
 
 import getBrowserType from "../utils/getBrowser";
@@ -72,6 +72,8 @@ const ChatPage: React.FC = () => {
   }
 
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
       <div className="bg-white shadow-lg rounded-lg p-4 w-full max-w-4xl flex flex-col space-y-4">
         <div className="flex justify-between items-center">
@@ -90,9 +92,9 @@ const ChatPage: React.FC = () => {
           localAudioTrack?.enabled &&
           localVideoTrack?.enabled ? (
             <Room
-              name={name}
-              localAudioTrack={localAudioTrack}
-              localVideoTrack={localVideoTrack}
+            name={name}
+            localAudioTrack={localAudioTrack}
+            localVideoTrack={localVideoTrack}
             />
           ) : (
             <p className="text-gray-500">Chat Ended</p>
@@ -104,7 +106,7 @@ const ChatPage: React.FC = () => {
             className="w-full p-2 border rounded-lg"
             placeholder="Type your message..."
             rows={3}
-          />
+            />
           <button className="bg-indigo-600 text-white py-2 px-4 rounded-lg mt-2">
             Send
           </button>
@@ -121,6 +123,7 @@ const ChatPage: React.FC = () => {
         />
       )}
     </div>
+    </>
   );
 };
 
