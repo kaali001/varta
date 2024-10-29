@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { Room } from "./Room";
-import { Navbar } from "../components/Navbar";
+import { Navbar } from "../Components/Navbar";
 import UserPermission from "../components/media_permission/UserPermission";
 
 import getBrowserType from "../utils/getBrowser";
