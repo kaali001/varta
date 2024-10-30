@@ -1,18 +1,19 @@
 // src/index.js
-import http from "http";
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import { Server } from "socket.io";
-import { UserManager } from "./managers/UserManager.js";
+import http from 'http';
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { Server } from 'socket.io';
+import { UserManager } from './managers/UserManager.js'; 
 
-dotenv.config({ path: "./config.env" });
+
+dotenv.config({ path: './config.env' });
 
 const port = process.env.PORT || 5000;
-const frontend_url = process.env.FRONTEND_URL || "http://localhost:3000";
+const frontend_url = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 const app = express();
-const server = http.createServer(app);
+const server = http.createServer(app); 
 
 const io = new Server(server, {
   cors: {
@@ -20,19 +21,21 @@ const io = new Server(server, {
     methods: ["GET", "POST", "PUT", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
+
   },
 });
 
 const corsOptions = {
-  origin: frontend_url,
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
+  origin: frontend_url, 
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, 
 };
 // Use CORS middleware
 app.use(cors(corsOptions));
 // Handle OPTIONS preflight requests
-app.options("*", cors(corsOptions));
+app.options('*', cors(corsOptions)); 
+
 
 const userManager = new UserManager();
 
@@ -46,8 +49,9 @@ io.on("connection", (socket) => {
   });
 });
 
-app.get("/", (req, res) => {
-  res.send(`
+
+app.get("/", (req, res) => 
+  {  res.send(`
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -95,11 +99,13 @@ app.get("/", (req, res) => {
       </body>
     </html>
   `);
-});
-app.get("/user-count", (req, res) => {
+ });
+
+ app.get("/user-count", (req, res) => {
   const userCount = userManager.getUserCount();
   res.json({ userCount });
 });
+
 server.listen(port, function () {
   console.log(`Listening to port at : ${port}`);
 });
