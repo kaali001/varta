@@ -29,7 +29,7 @@ export const UserCount: React.FC = () => {
   return (
     <>
     <h3 className="text-lg font-semibold text-gray-700 inline-block">User Count : <p className="text-lg font-bold text-blue-500 inline-block">
-    {userCount !== null ? userCount : "Loading..."}
+    {userCount !== null ? userCount : "0"}
     </p></h3>
     </>
 );
