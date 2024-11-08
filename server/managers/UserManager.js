@@ -1,8 +1,6 @@
-// src/managers/UserManager.js
-import { Socket } from 'socket.io';
-import { RoomManager } from './RoomManager.js'; // Ensure the .js extension is included
+import { RoomManager } from "./RoomManager.js";
 
-// Define the user structure using plain JavaScript
+// Defining the user structure
 export class UserManager {
   constructor() {
     this.users = [];
@@ -11,54 +9,57 @@ export class UserManager {
   }
 
   addUser(name, socket) {
-    this.users.push({
-      name,
-      socket,
-    });
-    this.queue.push(socket.id);
-    socket.emit('lobby');
-    this.clearQueue();
+    const user = { name, socket };
+    this.users.push(user);
+    this.queue.push(user);
+
+    console.log(`User added: ${name}, ID: ${socket.id}`);
+
+    socket.emit("lobby");
+    this.tryToPairUsers();
     this.initHandlers(socket);
   }
 
   removeUser(socketId) {
-    const user = this.users.find((x) => x.socket.id === socketId);
-    this.users = this.users.filter((x) => x.socket.id !== socketId);
-    this.queue = this.queue.filter((x) => x !== socketId);
+    const user = this.users.find((u) => u.socket.id === socketId);
+    if (user) {
+      console.log(`User removed: ${user.name}`);
+
+      this.users = this.users.filter((u) => u.socket.id !== socketId);
+      this.queue = this.queue.filter((u) => u.socket.id !== socketId);
+    }
   }
 
-  clearQueue() {
-    if (this.queue.length < 2) {
-      return;
+  tryToPairUsers() {
+    // Attempt to pair users if at least two are available
+    while (this.queue.length >= 2) {
+      const user1 = this.queue.pop();
+      const user2 = this.queue.pop();
+      if (!user1 || !user2) {
+        return;
+      }
+      this.roomManager.createRoom(user1, user2);
     }
-
-    const id1 = this.queue.pop();
-    const id2 = this.queue.pop();
-    const user1 = this.users.find((x) => x.socket.id === id1);
-    const user2 = this.users.find((x) => x.socket.id === id2);
-
-    if (!user1 || !user2) {
-      return;
-    }
-
-    this.roomManager.createRoom(user1, user2);
-    this.clearQueue();
   }
 
   initHandlers(socket) {
-    socket.on('offer', ({ sdp, roomId }) => {
+    socket.on("offer", ({ sdp, roomId }) => {
+      console.log("check1- RoomId:", roomId);
       this.roomManager.onOffer(roomId, sdp, socket.id);
     });
 
-    socket.on('answer', ({ sdp, roomId }) => {
+    socket.on("answer", ({ sdp, roomId }) => {
+      console.log("check2- RoomId:", roomId);
       this.roomManager.onAnswer(roomId, sdp, socket.id);
     });
 
-    socket.on('add-ice-candidate', ({ candidate, roomId, type }) => {
+    socket.on("add-ice-candidate", ({ candidate, roomId, type }) => {
+      console.log("check3- RoomId:", roomId);
       this.roomManager.onIceCandidates(roomId, socket.id, candidate, type);
     });
   }
+
   getUserCount() {
-    return this.users.length;
+    return this.users.length; //  retrieve the number of connected users
   }
 }
