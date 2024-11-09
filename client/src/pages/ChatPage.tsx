@@ -54,7 +54,7 @@ const ChatPage: React.FC = () => {
   return (
     <>
     <Navbar />
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4 pt-12 ">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4 pt-8 ">
       <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg flex flex-col md:flex-row overflow-hidden">
         
         {/* Video Section */}
@@ -75,7 +75,7 @@ const ChatPage: React.FC = () => {
         {/* Chat Section */}
         <div className="lg:w-1/3 bg-white border-l border-gray-300 lg:pl-4">
           <div className="flex flex-col h-full">
-            <div className="flex-grow overflow-y-auto p-4 min-h-[10rem]">
+            <div className="flex-grow overflow-y-auto p-4 min-h-[8rem]">
               <p className="text-gray-700 ">Chat messages...</p>
             </div>
   
