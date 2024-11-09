@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useRef, useState } from "react";
 import { Socket, io } from "socket.io-client";
-import { ClipLoader } from "react-spinners";
+import { HashLoader } from "react-spinners";
 import config from "../config";
 
 const URL = `${config.backendUrl}`;
@@ -239,32 +239,46 @@ export const Room = ({
   }, [localVideoTrack]);
 
   return (
-    <div className="relative w-full h-full flex justify-center items-center">
-      <div className="relative w-full h-full">
+    <div className="relative w-full h-full flex justify-center items-center p-0.5 ">
+      <div className="relative w-full h-[24rem] md:h-[27rem] lg:h-[29rem] 2xl:h-[40rem] flex items-center justify-center bg-white bg-opacity-30 rounded-lg overflow-hidden shadow-lg">
+        {/* Username Label */}
+
+        {!lobby && (
+          <div className="absolute top-2 left-4 flex items-center bg-white rounded shadow-lg p-1">
+            <img
+              src="https://cdn.pixabay.com/photo/2020/03/03/08/26/india-4897873_1280.png"
+              alt="Country Flag"
+              className=" rounded-full size-[1.5rem] mr-2"
+            />
+            <span className="text-gray-700 font-semibold">{name}</span>
+          </div>
+        )}
+
+        {/* Remote Video */}
+
         <video
           ref={remoteVideoRef}
           autoPlay
           className="w-full h-full object-cover"
         />
 
+        {/* Loading Indicator */}
         {lobby && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
-            <ClipLoader color="#4A90E2" size={50} />
+          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+            <HashLoader color="#fa4e65" />
           </div>
         )}
 
+        {/* Local Video (Mini preview) */}
         <div className="absolute bottom-4 left-4 border border-gray-300 rounded-lg overflow-hidden shadow-lg">
           <video
             ref={localVideoRef}
             autoPlay
             muted
-            className="w-24 h-24 object-cover"
+            className="w-20 h-20 md:w-24 md:h-24 object-cover"
           />
         </div>
       </div>
-      <p className="absolute bottom-2 text-lg font-semibold text-white">
-        {name}
-      </p>
     </div>
   );
 };
