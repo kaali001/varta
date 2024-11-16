@@ -5,9 +5,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { Server } from 'socket.io';
 import { UserManager } from './managers/UserManager.js'; 
-
+import connectDB from './db/db.js';
 
 dotenv.config({ path: './config.env' });
+connectDB();
 
 const port = process.env.PORT || 5000;
 const frontend_url = process.env.FRONTEND_URL || 'http://localhost:3000';

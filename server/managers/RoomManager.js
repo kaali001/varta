@@ -16,11 +16,11 @@ export class RoomManager {
     });
 
     console.log(
-      `Room ${roomId} created for users: ${user1.name} & ${user2.name}`
+      `Room ${roomId} created for User1(${user1.name}, Country: ${user1.country}), User2(${user2.name}, Country: ${user2.country})`
     );
-
-    user1.socket.emit("send-offer", { roomId });
-    user2.socket.emit("send-offer", { roomId });
+    
+    user1.socket.emit("send-offer", { roomId, remoteCountry: user2.country });
+    user2.socket.emit("send-offer", { roomId, remoteCountry: user1.country });
   }
 
   onOffer(roomId, sdp, senderSocketId) {
