@@ -15,7 +15,7 @@ export class UserManager {
     const forwarded = socket.handshake.headers['x-forwarded-for'];
     const clientIp = forwarded ? forwarded.split(/, /)[0] : socket.handshake.address;
     const ipDetails = await fetchIpDetails(clientIp);
-    const country = ipDetails?.country_name || 'Unknown';
+    const country = ipDetails?.country || 'Unknown';
 
     // Saving in to database
     const user_data = new User({
