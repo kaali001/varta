@@ -1,4 +1,3 @@
-// src/components/UserCount.tsx
 import React, { useEffect, useState } from 'react';
 import config from "../config";
 
@@ -21,7 +20,7 @@ export const UserCount: React.FC = () => {
 
   useEffect(() => {
     fetchUserCount();
-    const interval = setInterval(fetchUserCount, 1000); // Poll every 5 seconds
+    const interval = setInterval(fetchUserCount, 1000); 
 
     return () => clearInterval(interval); // Clean up on unmount
   }, []);

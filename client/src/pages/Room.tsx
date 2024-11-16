@@ -30,7 +30,7 @@ export const Room = ({
   localVideoTrack: MediaStreamTrack | null;
 }) => {
   const [lobby, setLobby] = useState(true);
-  // const [RoomId, setRoomId] = useState<string | null>(null); // Storing roomId in state
+  const [remoteUserCountry, setRemoteUserCountry] = useState<string | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const sendingPcRef = useRef<RTCPeerConnection | null>(null);
   const receivingPcRef = useRef<RTCPeerConnection | null>(null);
@@ -172,11 +172,17 @@ export const Room = ({
     });
     socketRef.current = socket;
 
-    socket.on("send-offer", async ({ roomId }) => {
+    socket.on("send-offer", async ({ roomId, remoteCountry }) => {
       console.log("Received offer request. Creating offer... RoomId:", roomId);
       setLobby(false);
-      // setRoomId(roomId);
-      // console.log("roomId:",RoomId);
+      console.log("Received send-offer payload:", { roomId, remoteCountry });
+      setRemoteUserCountry(remoteCountry);
+
+       if (remoteCountry && remoteCountry !== "Unknown") {
+        setRemoteUserCountry(remoteCountry);
+      } else {
+        setRemoteUserCountry(null);
+      }
 
       const sendingPc = initializePeerConnection("sender", roomId);
       sendingPcRef.current = sendingPc;
@@ -242,20 +248,20 @@ export const Room = ({
     <div className="relative w-full h-full flex justify-center items-center p-0.5 ">
       <div className="relative w-full h-[24rem] md:h-[27rem] lg:h-[29rem] 2xl:h-[40rem] flex items-center justify-center bg-white bg-opacity-30 rounded-lg overflow-hidden shadow-lg">
         {/* Username Label */}
-
         {!lobby && (
           <div className="absolute top-2 left-4 flex items-center bg-white rounded shadow-lg p-1">
-            <img
-              src="https://cdn.pixabay.com/photo/2020/03/03/08/26/india-4897873_1280.png"
-              alt="Country Flag"
-              className=" rounded-full size-[1.5rem] mr-2"
-            />
+            {remoteUserCountry && (
+              <img
+                src={`https://flagcdn.com/16x12/${remoteUserCountry.toLowerCase()}.png`}
+                alt="Country Flag"
+                className="rounded-full size-[1.5rem] mr-2"
+              />
+            )}
             <span className="text-gray-700 font-semibold">{name}</span>
           </div>
         )}
 
         {/* Remote Video */}
-
         <video
           ref={remoteVideoRef}
           autoPlay
@@ -269,7 +275,7 @@ export const Room = ({
           </div>
         )}
 
-        {/* Local Video (Mini preview) */}
+        {/* Local Video */}
         <div className="absolute bottom-4 left-4 border border-gray-300 rounded-lg overflow-hidden shadow-lg">
           <video
             ref={localVideoRef}

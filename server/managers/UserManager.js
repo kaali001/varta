@@ -1,4 +1,6 @@
 import { RoomManager } from "./RoomManager.js";
+import { fetchIpDetails } from '../utils/IpService.js';
+import { User } from '../models/UserData.js';
 
 // Defining the user structure
 export class UserManager {
@@ -8,14 +10,29 @@ export class UserManager {
     this.roomManager = new RoomManager();
   }
 
-  addUser(name, socket) {
-    const user = { name, socket };
+  async addUser(name, socket) {
+     // Fetching  IP details
+    const forwarded = socket.handshake.headers['x-forwarded-for'];
+    const clientIp = forwarded ? forwarded.split(/, /)[0] : socket.handshake.address;
+    const ipDetails = await fetchIpDetails(clientIp);
+    const country = ipDetails?.country_name || 'Unknown';
+
+    // Saving in to database
+    const user_data = new User({
+      socketId: socket.id,
+      ip:clientIp,
+      country,
+      otherDetails: ipDetails,
+    });
+    await user_data.save();
+
+    const user = { name, socket, country };
     this.users.push(user);
     this.queue.push(user);
 
-    console.log(`User added: ${name}, ID: ${socket.id}`);
+    console.log(`User added: ${name}, ID: ${socket.id}, Country: ${country}`);
 
-    socket.emit("lobby");
+    socket.emit("lobby", { country });
     this.tryToPairUsers();
     this.initHandlers(socket);
   }
