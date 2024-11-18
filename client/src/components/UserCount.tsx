@@ -26,10 +26,11 @@ export const UserCount: React.FC = () => {
   }, []);
 
   return (
-    <>
-    <h3 className="text-lg font-semibold text-gray-700 inline-block">User Count : <p className="text-lg font-bold text-blue-500 inline-block">
-    {userCount !== null ? userCount : "0"}
-    </p></h3>
-    </>
-);
+    <span className="text-gray-700 text-sm font-medium">
+      Active User -{" "}
+      <span className="text-pink-500 font-bold">
+        {userCount !== null ? userCount : "0"}
+      </span>
+    </span>
+  );
 };
