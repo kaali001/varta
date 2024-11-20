@@ -112,7 +112,11 @@ Make sure you have the following installed:
 # 🎥 Demo
 
 ## 📸 Screenshots:
-![image](https://github.com/user-attachments/assets/aa5b2c41-819c-4e50-bf5b-5b8fc414c025)
+![image](https://github.com/user-attachments/assets/1ba18cdc-14e2-4280-9d0f-25569af7ac3e)
+
+
+![image](https://github.com/user-attachments/assets/cce7a8e3-293a-4ad0-b857-7e0f57ddeb59)
+
 
 
 
