@@ -18,13 +18,13 @@ export class UserManager {
     const country = ipDetails?.country || 'Unknown';
 
     // Saving in to database
-    // const user_data = new User({
-    //   socketId: socket.id,
-    //   ip:clientIp,
-    //   country,
-    //   otherDetails: ipDetails,
-    // });
-    // await user_data.save();
+    const user_data = new User({
+      socketId: socket.id,
+      ip:clientIp,
+      country,
+      otherDetails: ipDetails,
+    });
+    await user_data.save();
 
     const user = { name, socket, country };
     this.users.push(user);

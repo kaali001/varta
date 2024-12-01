@@ -10,8 +10,6 @@ import {
 } from "../components/media_permission/mediaPermissions";
 
 const ChatPage: React.FC = () => {
-
-  const [chatInput, setChatInput] = useState("");
   const [isChatActive, setIsChatActive] = useState(false);
   const [name] = useState("User");
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -56,36 +54,25 @@ const ChatPage: React.FC = () => {
     console.log(error.errorMsg);
   }
 
-
-  const joinExitHandler = () => {
-    setIsChatActive((prev) => !prev);
-  };
-
   return (
     <>
       <Navbar />
       <div className="bg-gray-100 flex flex-col items-center p-4 pt-20 mt-0 min-h-screen overflow-hidden">
-        <div className="w-full max-w-6xl bg-gray-200 shadow-lg rounded-lg flex flex-col md:flex-row overflow-hidden">
+        <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg flex flex-col md:flex-row overflow-hidden">
           {/* Video Section */}
-
-          {!isPopoverOpen &&
-          isChatActive &&
-          localAudioTrack?.enabled &&
-          localVideoTrack?.enabled ? (
-            <>
-              <Room
+          <div className="flex-1 relative bg-gray-200 p-4 flex flex-col items-center min-h-[26rem] md:h-[29rem] lg:h-[31rem] 2xl:h-[41rem]">
+            {!isPopoverOpen && isChatActive &&
+            localAudioTrack?.enabled &&
+            localVideoTrack?.enabled ? (
+              <>
+                <Room
                   name={name}
-                localAudioTrack={localAudioTrack}
-                localVideoTrack={localVideoTrack}
-                chatInput={chatInput}
-                setChatInput={setChatInput}
-                joinExitHandler={joinExitHandler}
-                joinExitLabel="Exit"
-              />
-            </>
-          ) : (
-            <>
-              <div className="flex-1 relative bg-gray-200 p-4 flex flex-col items-center min-h-[26rem] md:h-[29rem] lg:h-[31rem] 2xl:h-[41rem]">
+                  localAudioTrack={localAudioTrack}
+                  localVideoTrack={localVideoTrack}
+                />
+              </>
+            ) : (
+              <>
                 <img
                   className="opacity-50 mt-24 mx-auto"
                   src="./apple-icon-180x180.png"
@@ -94,43 +81,42 @@ const ChatPage: React.FC = () => {
                 <p className="text-gray-500 mt-8 mx-auto">
                   Click on join button to start match.....
                 </p>
+              </>
+            )}
+          </div>
+
+          {/* Chat Section */}
+
+          <div className="lg:w-1/3 bg-white border-l border-gray-300 lg:pl-4">
+            <div className="flex flex-col h-full">
+              <div className="flex-grow overflow-y-auto p-4 min-h-[7rem]">
+                <p className="text-gray-700">Chat messages...</p>
               </div>
-               {/* Chat Section */}
-              <div className="lg:w-1/3 bg-white border-l border-gray-300 lg:pl-4">
-                <div className="flex flex-col h-full">
-                  <div className="flex-grow overflow-y-auto p-4 min-h-[7rem]">
-                    <p className="text-gray-700">Chat messages...</p>
-                  </div>
 
-                  <div className="flex items-center border-t p-2">
-                    <button
-                      className="text-white bg-[#FA546B] py-2 px-4 mr-2 rounded-lg ml-2"
-                      onClick={() => setIsChatActive((prev) => !prev)}
-                    >
-                      {isChatActive ? "Exit" : "Join"}
-                    </button>
+              <div className="flex items-center border-t p-2">
+                <button
+                  className="text-white bg-[#FA546B] py-2 px-4 mr-2 rounded-lg ml-2"
+                  onClick={() => setIsChatActive((prev) => !prev)}
+                >
+                  {isChatActive ? "Exit" : "Join"}
+                </button>
 
-                    <div className="relative w-full">
-                      <input
-                        type="text"
-                        className="w-full p-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                        placeholder="Type a message..."
-                        disabled = {true}
-                      />
-                      <button
-                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-indigo-400"
-                        disabled = {true}
+                <div className="relative w-full">
+                  <input
+                    type="text"
+                    className="w-full p-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    placeholder="Type a message..."
+                  />
+                  <button
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-indigo-400"
+                    onClick={() => console.log("Send message!")}
                   >
                     <SendHorizontal />
                   </button>
-                    </div>
-                  </div>
                 </div>
               </div>
-            </>
-          )}
-
-         
+            </div>
+          </div>
         </div>
 
         {isPopoverOpen && (
