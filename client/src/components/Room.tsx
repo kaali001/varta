@@ -34,7 +34,6 @@ export const Room = ({
   setChatInput,
   joinExitHandler,
   joinExitLabel,
- 
 }: {
   name: string;
   localAudioTrack: MediaStreamTrack | null;
@@ -43,7 +42,6 @@ export const Room = ({
   setChatInput: (value: string) => void;
   joinExitHandler: () => void;
   joinExitLabel: string;
- 
 }) => {
   const [lobby, setLobby] = useState(true);
   const [remoteUserCountry, setRemoteUserCountry] = useState<string | null>(null);
@@ -219,7 +217,7 @@ export const Room = ({
       console.log("Received send-offer payload:", { roomId, remoteCountry });
       setRemoteUserCountry(remoteCountry);
 
-       if (remoteCountry && remoteCountry !== "Unknown") {
+      if (remoteCountry && remoteCountry !== "Unknown") {
         setRemoteUserCountry(remoteCountry);
       } else {
         setRemoteUserCountry(null);
@@ -228,7 +226,7 @@ export const Room = ({
       const sendingPc = initializePeerConnection("sender", roomId);
       sendingPcRef.current = sendingPc;
      
-     
+      
       const dataChannel = sendingPc.createDataChannel("chat");
       dataChannelRef.current = dataChannel;
 
@@ -294,58 +292,61 @@ export const Room = ({
   }, [localVideoTrack]);
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-center md:flex-row ">
-      <div className="min-h-[26rem] md:h-[29rem] lg:h-[31rem] 2xl:h-[41rem]">
-      <div className="relative m-4 flex-1 h-[24rem] md:h-[27rem] lg:h-[29rem] 2xl:h-[40rem] flex items-center justify-center bg-white bg-opacity-50 rounded-lg overflow-hidden shadow-lg">
-        {/* Username Label */}
-        {!lobby && (
-          <div className="absolute top-2 left-4 flex items-center bg-white rounded shadow-lg p-1">
-            {remoteUserCountry && (
-              <img
-                src={`https://flagcdn.com/16x12/${remoteUserCountry.toLowerCase()}.png`}
-                alt="Country Flag"
-                className="rounded-full size-[1.5rem] mr-2"
-              />
-            )}
-            <span className="text-gray-700 font-semibold">{name}</span>
-          </div>
-        )}
+    <div className="relative w-full h-full flex flex-col min-h-[26rem] md:h-[29rem] lg:h-[31rem] 2xl:h-[41rem] justify-center md:flex-row ">
+      <div className="relative flex-1">
+        <div className="relative m-4 flex-1 h-[24rem] md:h-[27rem] lg:h-[29rem] 2xl:h-[39rem] flex items-center justify-center bg-white bg-opacity-50 rounded-lg overflow-hidden shadow-lg">
+          {/* Username Label */}
+          {!lobby && (
+            <div className="absolute top-2 left-4 flex items-center bg-white rounded shadow-lg p-1">
+              {remoteUserCountry && (
+                <img
+                  src={`https://flagcdn.com/16x12/${remoteUserCountry.toLowerCase()}.png`}
+                  alt="Country Flag"
+                  className="rounded-full size-[1.5rem] mr-2"
+                />
+              )}
+              <span className="text-gray-700 font-semibold">{name}</span>
+            </div>
+          )}
 
-        {/* Remote Video */}
-        <video
-          ref={remoteVideoRef}
-          autoPlay
-          className="w-full h-full object-cover"
-        />
-
-        {/* Loading Indicator */}
-        {lobby && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
-            <HashLoader color="#fa4e65" />
-          </div>
-        )}
-
-        {/* Local Video */}
-        <div className="absolute bottom-4 left-4 border border-gray-300 rounded-lg overflow-hidden shadow-lg">
+          {/* Remote Video */}
           <video
-            ref={localVideoRef}
+            ref={remoteVideoRef}
             autoPlay
-            muted
-            className="w-20 h-20 md:w-24 md:h-24 object-cover"
+            className="w-full h-full object-cover"
           />
+
+          {/* Loading Indicator */}
+          {lobby && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+              <HashLoader color="#fa4e65" />
+            </div>
+          )}
+
+          {/* Local Video */}
+          <div className="absolute bottom-4 left-4 border border-gray-300 rounded-lg overflow-hidden shadow-lg">
+            <video
+              ref={localVideoRef}
+              autoPlay
+              muted
+              className="w-20 h-20 md:w-24 md:h-24 object-cover"
+            />
+          </div>
         </div>
       </div>
+
+      {/* Chat Section */}
+      <div className="h-full lg:w-1/3">
+        <ChatSection
+          chatInput={chatInput}
+          setChatInput={setChatInput}
+          messages={messages}
+          sendMessage={handleSendMessage}
+          joinExitHandler={joinExitHandler}
+          joinExitLabel={joinExitLabel}
+        />
       </div>
 
-       {/* Chat Section */}
-       <ChatSection
-        chatInput={chatInput}
-        setChatInput={setChatInput}
-        messages={messages}
-        sendMessage={handleSendMessage}
-        joinExitHandler={joinExitHandler}
-        joinExitLabel={joinExitLabel}
-      />
     </div>
   );
 };
