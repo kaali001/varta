@@ -226,7 +226,7 @@ export const Room = ({
       const sendingPc = initializePeerConnection("sender", roomId);
       sendingPcRef.current = sendingPc;
      
-
+      
       const dataChannel = sendingPc.createDataChannel("chat");
       dataChannelRef.current = dataChannel;
 
@@ -346,6 +346,7 @@ export const Room = ({
           joinExitLabel={joinExitLabel}
         />
       </div>
+
     </div>
   );
 };
