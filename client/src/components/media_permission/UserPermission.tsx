@@ -143,20 +143,25 @@ export default function UserPermission({
               <X size={24} />
             </button>
 
-            <h3 className="text-2xl font-bold leading-6 text-primaryPink mb-4">
+            <h3 className="text-2xl font-bold leading-6 text-primaryPink mb-4 text-center">
               Media Access Permissions
             </h3>
 
-            <div className="bg-highlightOrange border-l-4 border-accentOrange p-4 mb-6">
-              <div className="grid grid-flow-col items-center">
-                <Info
-                  className="h-6 w-6 text-accentOrange"
-                  aria-hidden="true"
-                />
-                <p className="text-sm text-white ml-3">
-                  We need your permission to access your camera and microphone
-                  for the best experience. Your privacy is important to us.
-                </p>
+            <div className="bg-blue-100 border-l-4 border-blue-500 p-4 mb-6">
+              <div className="grid grid-flow-col">
+                <div>
+                  <Info
+                    className="h-6 w-6 text-blue-600 mt-1"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="pl-2">
+                  <h2 className="text-blue-700 font-semibold">Info</h2>
+                  <p className="text-sm text-blue-500 mt-2">
+                    We need your permission to access your camera and microphone
+                    for the best experience. Your privacy is important to us.
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -192,12 +197,12 @@ export default function UserPermission({
               )}
             </div>
 
-            <div className="mt-8">
+            <div className="mt-8 flex justify-center">
               <button
                 onClick={handleOnConfirm}
-                className="w-full bg-primaryPink hover:bg-gradient-to-r hover:from-dangerRed hover:to-accentOrange text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primaryPink transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+                className="w-3/4 bg-primaryPink block hover:bg-gradient-to-r hover:from-dangerRed hover:to-accentOrange text-white font-bold py-3 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primaryPink transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
               >
-                Confirm Settings
+                Save Changes
               </button>
             </div>
           </div>
