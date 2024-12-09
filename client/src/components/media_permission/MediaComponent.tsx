@@ -17,8 +17,8 @@ export const MediaToggle: React.FC<MediaToggleProps> = ({
     <div className="flex items-center">
       {icon}
       <div>
-        <h4 className="text-lg font-medium text-primaryPink">{title}</h4>
-        <p className="text-sm text-accentOrange">{description}</p>
+        <h4 className="text-lg font-medium text-zinc-900">{title}</h4>
+        <p className="text-sm text-zinc-700">{description}</p>
       </div>
     </div>
     <div className="flex items-center">
