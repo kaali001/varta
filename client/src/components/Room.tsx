@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef, useState } from "react";
+import { useEffect, useCallback, useRef, useState,useMemo } from "react";
 import { Socket, io } from "socket.io-client";
 import { HashLoader } from "react-spinners";
 import config from "../config";
@@ -44,6 +44,7 @@ export const Room = ({
   joinExitLabel: string;
 }) => {
   const [lobby, setLobby] = useState(true);
+  const [isMatching, setIsMatching] = useState(false);
   const [remoteUserCountry, setRemoteUserCountry] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]); // Fixed
   const socketRef = useRef<Socket | null>(null);
@@ -204,6 +205,41 @@ export const Room = ({
     }
   };
 
+  const handleExit = () => {
+    console.log("Exit button pressed. Cleaning up connections.");
+  
+    // Start matching delay
+    setIsMatching(true);
+
+    // Close peer connections
+    sendingPcRef.current?.close();
+    receivingPcRef.current?.close();
+    sendingPcRef.current = null;
+    receivingPcRef.current = null;
+  
+    setMessages([]);
+    setRemoteUserCountry(null);
+    
+    // Clear states after an interval(must be less than removeRoom() in server.)
+    setTimeout(() => {
+      setLobby(true);
+      setIsMatching(false);
+    }, 1800); // 1.8-second delay
+  
+    // Notify the server to requeue the user
+    socketRef.current?.emit("user-exit", { name });
+  
+    // Reset remote video
+    if (remoteStreamRef.current) {
+      remoteStreamRef.current.getTracks().forEach((track) => track.stop());
+      // remoteStreamRef.current = new MediaStream(); // Create fresh stream
+    }
+  
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.srcObject = null;
+    }
+  };
+  
   useEffect(() => {
     const socket = io(URL, {
       transports: ["websocket"],
@@ -214,6 +250,7 @@ export const Room = ({
     socket.on("send-offer", async ({ roomId, remoteCountry }) => {
       console.log("Received offer request. Creating offer... RoomId:", roomId);
       setLobby(false);
+      setMessages([]);
       console.log("Received send-offer payload:", { roomId, remoteCountry });
       setRemoteUserCountry(remoteCountry);
 
@@ -225,8 +262,7 @@ export const Room = ({
 
       const sendingPc = initializePeerConnection("sender", roomId);
       sendingPcRef.current = sendingPc;
-     
-      
+
       const dataChannel = sendingPc.createDataChannel("chat");
       dataChannelRef.current = dataChannel;
 
@@ -256,7 +292,32 @@ export const Room = ({
     socket.on("offer", handleOffer);
     socket.on("answer", handleAnswer);
     socket.on("add-ice-candidate", handleAddIceCandidate);
+    socket.on("room-removed", () => {
+      console.log("Room removed. Resetting state...");
 
+      setIsMatching(true);
+      // Clean up WebRTC connections
+      sendingPcRef.current?.close();
+      receivingPcRef.current?.close();
+      sendingPcRef.current = null;
+      receivingPcRef.current = null;
+      setMessages([]);
+      setRemoteUserCountry(null);
+
+      setTimeout(() => {
+        setLobby(true);
+        setIsMatching(false);
+      }, 1800);
+
+      // Reset remote video
+      if (remoteStreamRef.current) {
+        remoteStreamRef.current.getTracks().forEach((track) => track.stop());
+        remoteStreamRef.current = new MediaStream();
+      }
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = null;
+      }
+    });
     socket.on("disconnect", () => {
       console.log("Socket disconnected. Closing peer connections.");
       sendingPcRef.current?.close();
@@ -291,6 +352,24 @@ export const Room = ({
     }
   }, [localVideoTrack]);
 
+  // Add useMemo to prevent unnecessary re-renders of video elements
+  const videoConstraints = useMemo(
+    () => ({
+      className: "w-full h-full object-cover",
+    }),
+    []
+  );
+
+  useEffect(() => {
+    const currentRemoteVideo = remoteVideoRef.current;
+    return () => {
+      // Cleanup only when component unmounts
+      if (currentRemoteVideo) {
+        currentRemoteVideo.srcObject = null;
+      }
+    };
+  }, []);
+
   return (
     <div className="relative w-full h-full flex flex-col min-h-[26rem] md:h-[29rem] lg:h-[31rem] 2xl:h-[41rem] justify-center md:flex-row ">
       <div className="relative flex-1">
@@ -313,13 +392,19 @@ export const Room = ({
           <video
             ref={remoteVideoRef}
             autoPlay
-            className="w-full h-full object-cover"
+            playsInline
+            className={videoConstraints.className}
+            onContextMenu={(e) => e.preventDefault()}
+            key="remote-video" // Static key
           />
 
           {/* Loading Indicator */}
-          {lobby && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+          {(lobby || isMatching) && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-50">
               <HashLoader color="#fa4e65" />
+              <div className="mt-3 text-lg font-medium text-[#FA4E5B] ">
+                Finding new partner...
+              </div>
             </div>
           )}
 
@@ -342,11 +427,10 @@ export const Room = ({
           setChatInput={setChatInput}
           messages={messages}
           sendMessage={handleSendMessage}
-          joinExitHandler={joinExitHandler}
+          joinExitHandler={handleExit}
           joinExitLabel={joinExitLabel}
         />
       </div>
-
     </div>
   );
 };
