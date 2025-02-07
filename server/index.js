@@ -42,16 +42,6 @@ io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
   userManager.addUser("randomName", socket);
 
-  // socket.on("disconnect", () => {
-  //   console.log(`User disconnected: ${socket.id}`);
-  //   userManager.removeUser(socket.id);
-  // });
-
-  // Handle user-exit event
-  // socket.on("user-exit", () => {
-  //   console.log(`User ${socket.id} requested to exit.`);
-  //   userManager.removeUser(socket.id, true);
-  // });
 });
 
 
