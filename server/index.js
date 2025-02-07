@@ -1,10 +1,9 @@
-// src/index.js
 import http from 'http';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { Server } from 'socket.io';
-import { UserManager } from './managers/UserManager.js'; 
+import { UserManager } from './managers/UserManager.js';
 import connectDB from './db/db.js';
 
 dotenv.config({ path: './config.env' });
@@ -14,7 +13,7 @@ const port = process.env.PORT || 5000;
 const frontend_url = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 const app = express();
-const server = http.createServer(app); 
+const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
@@ -22,20 +21,19 @@ const io = new Server(server, {
     methods: ["GET", "POST", "PUT", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-
   },
 });
 
 const corsOptions = {
-  origin: frontend_url, 
+  origin: frontend_url,
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true, 
+  credentials: true,
 };
 // Use CORS middleware
 app.use(cors(corsOptions));
 // Handle OPTIONS preflight requests
-app.options('*', cors(corsOptions)); 
+app.options('*', cors(corsOptions));
 
 
 const userManager = new UserManager();
@@ -44,15 +42,21 @@ io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
   userManager.addUser("randomName", socket);
 
-  socket.on("disconnect", () => {
-    console.log(`User disconnected: ${socket.id}`);
-    userManager.removeUser(socket.id);
-  });
+  // socket.on("disconnect", () => {
+  //   console.log(`User disconnected: ${socket.id}`);
+  //   userManager.removeUser(socket.id);
+  // });
+
+  // Handle user-exit event
+  // socket.on("user-exit", () => {
+  //   console.log(`User ${socket.id} requested to exit.`);
+  //   userManager.removeUser(socket.id, true);
+  // });
 });
 
 
-app.get("/", (req, res) => 
-  {  res.send(`
+app.get("/", (req, res) => {
+  res.send(`
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -100,9 +104,9 @@ app.get("/", (req, res) =>
       </body>
     </html>
   `);
- });
+});
 
- app.get("/user-count", (req, res) => {
+app.get("/user-count", (req, res) => {
   const userCount = userManager.getUserCount();
   res.json({ userCount });
 });

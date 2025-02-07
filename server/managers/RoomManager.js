@@ -1,9 +1,9 @@
-
 let GLOBAL_ROOM_ID = 1;
 
 export class RoomManager {
-  constructor() {
+  constructor(userManager) {
     this.rooms = new Map();
+    this.userManager = userManager; // Store UserManager instance
   }
 
   createRoom(user1, user2) {
@@ -61,14 +61,76 @@ export class RoomManager {
     receivingUser.socket.emit("add-ice-candidate", { candidate, type });
   }
 
-  generate() {
-    return GLOBAL_ROOM_ID++;
-  }
-
   removeRoom(roomId) {
-    if (this.rooms.has(roomId)) {
+    const room = this.rooms.get(roomId);
+    if (room) {
+      // Notify both users that the room has been removed
+      room.user1.socket.emit("room-removed");
+      room.user2.socket.emit("room-removed");
+      const User1 = room.user1;
+      const User2 = room.user2;
+
+      // Remove the room
       this.rooms.delete(roomId);
       console.log(`Room ${roomId} removed.`);
+
+      // Wait 2 seconds before re-queueing users
+      setTimeout(() => {
+        // Verify if users are still connected before re-queuing
+        const isUser1Connected = this.userManager.users.some(
+          (u) => u.socket.id === User1.socket.id
+        );
+        const isUser2Connected = this.userManager.users.some(
+          (u) => u.socket.id === User2.socket.id
+        );
+
+        if (isUser1Connected) this.userManager.reQueueUser(User1);
+        if (isUser2Connected) this.userManager.reQueueUser(User2);
+      }, 2000);
     }
+  }
+
+  removeUserFromRooms(socketId) {
+    for (const [roomId, room] of this.rooms.entries()) {
+      if (
+        room.user1.socket.id === socketId ||
+        room.user2.socket.id === socketId
+      ) {
+        this.removeRoom(roomId);
+        break;
+      }
+    }
+  }
+
+  getRemainingUser(socketId) {
+    for (const [roomId, room] of this.rooms.entries()) {
+      if (room.user1.socket.id === socketId || room.user2.socket.id === socketId) {
+        const remainingUser = room.user1.socket.id === socketId ? room.user2 : room.user1;//get user present in room.
+        
+        // Notify remaining user first
+        remainingUser.socket.emit("room-removed");
+        
+        // Delay before cleaning up and returning
+        return new Promise(resolve => {
+          setTimeout(() => {
+            // Cleanup after 2 seconds
+            this.rooms.delete(roomId);
+            console.log(`Room ${roomId} cleaned up for remaining user`);
+            
+            // Verify if user is still connected
+            const isConnected = this.userManager.users.some(
+              u => u.socket.id === remainingUser.socket.id
+            );
+            
+            resolve(isConnected ? remainingUser : null);
+          }, 2000);
+        });
+      }
+    }
+    return Promise.resolve(null);
+  }
+
+  generate() {
+    return GLOBAL_ROOM_ID++;
   }
 }
