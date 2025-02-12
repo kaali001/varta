@@ -10,6 +10,12 @@ module.exports = {
         accentOrange: "#c14020",
         highlightOrange: "#f1633d",
       },
+      backdropBlur: {
+        xs: '2px',
+      },
+      blur: {
+        xs: '2px',
+      }
     },
   },
   plugins: [],

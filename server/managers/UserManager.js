@@ -10,7 +10,7 @@ export class UserManager {
     this.roomManager = new RoomManager(this);
   }
 
-  async addUser(name, socket) {
+  async addUser(name, socket, languages = []) {
     // Fetching  IP details
     const forwarded = socket.handshake.headers['x-forwarded-for'];
     const clientIp = forwarded ? forwarded.split(/, /)[0] : socket.handshake.address;
@@ -26,14 +26,12 @@ export class UserManager {
     });
     await user_data.save();
 
-    const user = { name, socket, country };
+    const user = { name, socket, country, languages };
     this.users.push(user);
-    this.queue.push(user);
 
     console.log(`User added: ${name}, ID: ${socket.id}, Country: ${country}`);
 
     socket.emit("lobby", { country });
-    this.tryToPairUsers();
     this.initHandlers(socket);
   }
 
@@ -79,6 +77,20 @@ export class UserManager {
   }
 
   initHandlers(socket) {
+    socket.on("user-info", ({ name, languages }) => {
+      const user = this.users.find(u => u.socket.id === socket.id);
+      if (user) {
+        user.name = name;
+        user.languages = languages;
+        // console.log(`Updated user ${socket.id} info:`, user.name);
+
+        if (!this.queue.some(u => u.socket.id === user.socket.id)) {
+          this.queue.push(user);
+          this.tryToPairUsers();
+        }
+      }
+    });
+
     socket.on("offer", ({ sdp, roomId }) => {
       console.log("check1- RoomId:", roomId);
       this.roomManager.onOffer(roomId, sdp, socket.id);

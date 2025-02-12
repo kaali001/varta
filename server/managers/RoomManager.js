@@ -19,8 +19,8 @@ export class RoomManager {
       `Room ${roomId} created for User1(${user1.name}, Country: ${user1.country}), User2(${user2.name}, Country: ${user2.country})`
     );
     
-    user1.socket.emit("send-offer", { roomId, remoteCountry: user2.country });
-    user2.socket.emit("send-offer", { roomId, remoteCountry: user1.country });
+    user1.socket.emit("send-offer", { roomId, remoteCountry: user2.country, name: user2.name });
+    user2.socket.emit("send-offer", { roomId, remoteCountry: user1.country, name: user1.name });
   }
 
   onOffer(roomId, sdp, senderSocketId) {
