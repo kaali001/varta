@@ -10,7 +10,9 @@ export class UserManager {
     this.roomManager = new RoomManager(this);
   }
 
+
   async addUser(name, socket, languages = []) {
+
     // Fetching  IP details
     const forwarded = socket.handshake.headers['x-forwarded-for'];
     const clientIp = forwarded ? forwarded.split(/, /)[0] : socket.handshake.address;

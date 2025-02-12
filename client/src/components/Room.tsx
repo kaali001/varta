@@ -47,7 +47,9 @@ export const Room = ({
 }) => {
   const [lobby, setLobby] = useState(true);
   const [isMatching, setIsMatching] = useState(false);
+
   const [remoteName, setRemoteName] = useState<string | null>(null);
+
   const [remoteUserCountry, setRemoteUserCountry] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]); // Fixed
   const socketRef = useRef<Socket | null>(null);
