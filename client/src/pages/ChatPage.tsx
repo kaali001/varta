@@ -13,10 +13,16 @@ const ChatPage: React.FC = () => {
 
   const [chatInput, setChatInput] = useState("");
   const [isChatActive, setIsChatActive] = useState(false);
-  const [name] = useState("User");
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [localAudioTrack, setLocalAudioTrack] = useState<MediaStreamTrack | null>(null);
   const [localVideoTrack, setLocalVideoTrack] = useState<MediaStreamTrack | null>(null);
+  const [userName, setUserName] = useState(() => {
+    return localStorage.getItem("username") || "";
+  });
+  const [learningLanguages, setLearningLanguages] = useState<string[]>(() => {
+    const storedLangs = localStorage.getItem("selectedLanguages");
+    return storedLangs ? JSON.parse(storedLangs) : [];
+  });
   const [error, setError] = useState({ isError: false, errorMsg: "" });
   const browser = getBrowserType();
 
@@ -64,8 +70,17 @@ const ChatPage: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-gray-100 flex flex-col items-center p-4 pt-20 mt-0 min-h-screen overflow-hidden">
-        <div className="w-full max-w-6xl bg-gray-200 shadow-lg rounded-lg flex flex-col md:flex-row overflow-hidden">
+      <div className="bg-gray-100 flex flex-col items-center p-4 pt-20 mt-0 min-h-screen overflow-hidden ">
+        {/*backdrop blur when popover is open */}
+        {isPopoverOpen && (
+          <div className="fixed inset-0 bg-gray-900/30 backdrop-blur-sm z-40"></div>
+        )}
+
+        <div
+          className={`w-full max-w-6xl bg-gray-200 shadow-lg rounded-lg flex flex-col md:flex-row overflow-hidden  ${
+            isPopoverOpen ? "blur-sm" : ""
+          }`}
+        >
           {/* Video Section */}
 
           {!isPopoverOpen &&
@@ -74,7 +89,8 @@ const ChatPage: React.FC = () => {
           localVideoTrack?.enabled ? (
             <>
               <Room
-                  name={name}
+                name={userName || "Anonymous"} 
+                learningLanguages={learningLanguages}
                 localAudioTrack={localAudioTrack}
                 localVideoTrack={localVideoTrack}
                 chatInput={chatInput}
@@ -95,7 +111,7 @@ const ChatPage: React.FC = () => {
                   Click on join button to start match.....
                 </p>
               </div>
-               {/* Chat Section */}
+              {/* Chat Section */}
               <div className="lg:w-1/3 bg-white border-l border-gray-300 lg:pl-4">
                 <div className="flex flex-col h-full">
                   <div className="flex-grow overflow-y-auto p-4 min-h-[7rem]">
@@ -115,22 +131,20 @@ const ChatPage: React.FC = () => {
                         type="text"
                         className="w-full p-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
                         placeholder="Type a message..."
-                        disabled = {true}
+                        disabled={true}
                       />
                       <button
                         className="absolute inset-y-0 right-0 flex items-center pr-3 text-indigo-400"
-                        disabled = {true}
-                  >
-                    <SendHorizontal />
-                  </button>
+                        disabled={true}
+                      >
+                        <SendHorizontal />
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </>
           )}
-
-         
         </div>
 
         {isPopoverOpen && (
@@ -140,6 +154,8 @@ const ChatPage: React.FC = () => {
             setLocalAudioTrack={setLocalAudioTrack}
             setLocalVideoTrack={setLocalVideoTrack}
             setError={setError}
+            setName={setUserName}
+            setSelectedLanguages={setLearningLanguages}
           />
         )}
       </div>

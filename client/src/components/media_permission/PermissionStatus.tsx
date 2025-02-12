@@ -25,8 +25,8 @@ export const PermissionStatus: React.FC<PermissionStatusProps> = ({
       <>
         <p className="grid grid-flow-col items-start gap-x-2">
           <XCircle className="w-4 h-4 mt-1" size={18} />
-          {label} access denied.
-          {didUserInteracted ? " Open browser settings and allow access" : null}
+          {label}  denied.
+          {didUserInteracted ? " allow access from settings" : null}
         </p>
       </>
     )}

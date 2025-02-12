@@ -28,6 +28,7 @@ interface Message {
 
 export const Room = ({
   name,
+  learningLanguages = [],
   localAudioTrack,
   localVideoTrack,
   chatInput,
@@ -36,6 +37,7 @@ export const Room = ({
   joinExitLabel,
 }: {
   name: string;
+  learningLanguages?: string[];
   localAudioTrack: MediaStreamTrack | null;
   localVideoTrack: MediaStreamTrack | null;
   chatInput: string;
@@ -45,6 +47,9 @@ export const Room = ({
 }) => {
   const [lobby, setLobby] = useState(true);
   const [isMatching, setIsMatching] = useState(false);
+
+  const [remoteName, setRemoteName] = useState<string | null>(null);
+
   const [remoteUserCountry, setRemoteUserCountry] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]); // Fixed
   const socketRef = useRef<Socket | null>(null);
@@ -247,7 +252,13 @@ export const Room = ({
     });
     socketRef.current = socket;
 
-    socket.on("send-offer", async ({ roomId, remoteCountry }) => {
+     // Send user info immediately after connection
+    socket.emit('user-info', { 
+      name,
+      languages: learningLanguages 
+    });
+
+    socket.on("send-offer", async ({ roomId, remoteCountry, name }) => {
       console.log("Received offer request. Creating offer... RoomId:", roomId);
       setLobby(false);
       setMessages([]);
@@ -259,6 +270,8 @@ export const Room = ({
       } else {
         setRemoteUserCountry(null);
       }
+
+      setRemoteName(name);
 
       const sendingPc = initializePeerConnection("sender", roomId);
       sendingPcRef.current = sendingPc;
@@ -329,7 +342,7 @@ export const Room = ({
       sendingPcRef.current?.close();
       receivingPcRef.current?.close();
     };
-  }, [localAudioTrack, localVideoTrack, handleOffer]);
+  }, [localAudioTrack, localVideoTrack, handleOffer, name, learningLanguages]);
 
   // Local video rendering effect
   useEffect(() => {
@@ -384,7 +397,7 @@ export const Room = ({
                   className="rounded-full size-[1.5rem] mr-2"
                 />
               )}
-              <span className="text-gray-700 font-semibold">{name}</span>
+              <span className="text-gray-700 font-semibold">{remoteName}</span>
             </div>
           )}
 
